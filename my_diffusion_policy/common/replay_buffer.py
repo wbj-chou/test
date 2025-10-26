@@ -179,8 +179,11 @@ class ReplayBuffer:
         else:
             root = zarr.group(store=store)
             # copy without recompression
-            n_copied, n_skipped, n_bytes_copied = zarr.copy_store(source=src_store, dest=store,
-                source_path='/meta', dest_path='/meta', if_exists=if_exists)
+            # 修改为（移除返回值接收）：
+            zarr.copy_store(
+                source=src_store, dest=store,
+                source_path='/meta', dest_path='/meta', if_exists=if_exists
+            )
             data_group = root.create_group('data', overwrite=True)
             if keys is None:
                 keys = src_root['data'].keys()
@@ -291,10 +294,10 @@ class ReplayBuffer:
     def resolve_compressor(compressor='default'):
         if compressor == 'default':
             compressor = numcodecs.Blosc(cname='lz4', clevel=5, 
-                shuffle=numcodecs.Blosc.NOSHUFFLE)
+                shuffle=numcodecs.Blosc.SHUFFLE_NONE)# 替换 NOSHUFFLE 为 SHUFFLE_NONE
         elif compressor == 'disk':
-            compressor = numcodecs.Blosc('zstd', clevel=5, 
-                shuffle=numcodecs.Blosc.BITSHUFFLE)
+            compressor = numcodecs.Blosc(cname='zstd', clevel=5, # 显式指定 cname 参数
+                shuffle=numcodecs.Blosc.SHUFFLE_BIT)# 替换 BITSHUFFLE 为 SHUFFLE_BIT
         return compressor
 
     @classmethod
