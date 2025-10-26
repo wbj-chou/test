@@ -38,7 +38,7 @@ class MultiImageObsEncoder(ModuleAttrMixin):
 
         #用于保存各通道对应的子模块
         key_model_map = nn.ModuleDict()                 #每个观测对应的视觉模型
-        key_transform_map = nn.ModuleDict               #每个观测对应的预处理操作
+        key_transform_map = nn.ModuleDict()               #每个观测对应的预处理操作
         key_shape_map = dict()                          #每个观测对应的输入形状 
 
         # ============================================================
