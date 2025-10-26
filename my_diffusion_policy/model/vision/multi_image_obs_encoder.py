@@ -85,7 +85,7 @@ class MultiImageObsEncoder(ModuleAttrMixin):
                 # 配置 resize 操作
                 # ==============================
                 input_shape = shape
-                this_resizer = nn.Indentity()
+                this_resizer = nn.Identity()
                 if resize_shape is not None:
                     if isinstance(resize_shape, dict):
                         h, w = resize_shape[key]
